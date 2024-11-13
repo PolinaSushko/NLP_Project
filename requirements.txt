@@ -4,4 +4,6 @@ matplotlib
 plotly
 scikit-learn
 tensorflow
+nltk
+keras
 -e .
