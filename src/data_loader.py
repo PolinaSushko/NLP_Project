@@ -4,6 +4,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import SnowballStemmer
 import string
+from keras_preprocessing.text import Tokenizer
 
 # Download necessary resources
 nltk.download('punkt')
@@ -56,6 +57,21 @@ def apply_preprocess(train_path, test_path):
     test_data.loc[:, 'processed_review'] = test_data['review'].apply(preprocess_text)
 
     return train_data, test_data
+
+def tokenize_text(text):
+    review    = text['processed_review']
+    sentiment = text['sentiment']
+
+    NUM_WORDS    = 10000
+    MAX_TEXT_LEN = 100
+
+    tokenizer = Tokenizer(num_words = NUM_WORDS)
+    tokenizer.fit_on_texts(review)
+
+    sequences = tokenizer.texts_to_sequences(review)
+
+    a.loc[:, 'sentiment'] = a['sentiment'].map({'negative' : 0, 
+                 'positive' : 1})
 
 #a, b = apply_preprocess('E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/train.csv', 
 #                        'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/test.csv')
