@@ -136,6 +136,14 @@ class DataLoader:
             X_test  = np.array(X_test, dtype=np.float32)
             y_test  = np.array(y_test, dtype=np.float32)
 
+            # Flatten X_train and X_test for saving into CSV
+            train_data = np.column_stack((X_train, y_train)) # Combine features and labels
+            test_data  = np.column_stack((X_test, y_test))  # Combine features and labels
+
+            # Save the combined data into CSV
+            pd.DataFrame(train_data).to_csv("E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/processed/train_data.csv", index=False, header=False)
+            pd.DataFrame(test_data).to_csv("E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/processed/test_data.csv", index=False, header=False)
+
             logging.info("Datasets created")
 
             return X_train, y_train, X_test, y_test
@@ -144,12 +152,12 @@ class DataLoader:
             logging.error("Error in creating in train and test sets", exc_info = True)
             raise e
 
-#if __name__ == "__main__":
-#    train_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/train.csv'
-#    test_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/test.csv'
+if __name__ == "__main__":
+    train_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/train.csv'
+    test_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/test.csv'
 
-#    data_loader = DataLoader(num_words = 10000, max_text_len = 100)
+    data_loader = DataLoader(num_words = 10000, max_text_len = 100)
 
-#    X_train, y_train, X_test, y_test = data_loader.create_train_test_ds(train_path, test_path)
+    X_train, y_train, X_test, y_test = data_loader.create_train_test_ds(train_path, test_path)
 
-#    print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
+    print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
