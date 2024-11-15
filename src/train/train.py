@@ -5,7 +5,7 @@ from tensorflow.keras.callbacks import EarlyStopping
 from src.exception import CustomException
 from src.logger import logging
 from src.data_loader import DataLoader
-from src.utils import save_object, evaluate_model
+from utils import save_object, evaluate_model
 
 class ModelTrainer:
     def __init__(self, input_dim = 10000, embedding_dim = 64, input_length = 100):

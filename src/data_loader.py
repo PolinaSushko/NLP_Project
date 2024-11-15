@@ -136,13 +136,20 @@ class DataLoader:
             X_test  = np.array(X_test, dtype=np.float32)
             y_test  = np.array(y_test, dtype=np.float32)
 
-            # Flatten X_train and X_test for saving into CSV
-            train_data = np.column_stack((X_train, y_train)) # Combine features and labels
-            test_data  = np.column_stack((X_test, y_test))  # Combine features and labels
+            train_rows_as_strings = [' '.join(map(str, row)) for row in X_train]
+            test_rows_as_strings  = [' '.join(map(str, row)) for row in X_test]
 
-            # Save the combined data into CSV
-            pd.DataFrame(train_data).to_csv("E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/processed/train_data.csv", index=False, header=False)
-            pd.DataFrame(test_data).to_csv("E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/processed/test_data.csv", index=False, header=False)
+            df_train_save = pd.DataFrame({
+                'Review': train_rows_as_strings,
+                'Sentiment': y_train
+            })
+            df_test_save = pd.DataFrame({
+                'Review' : test_rows_as_strings,
+                'Sentiment' : y_test
+            })
+
+            df_train_save.to_csv("E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/processed/train_processed.csv", index = False)
+            df_test_save.to_csv("E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/processed/test_processed.csv", index = False)
 
             logging.info("Datasets created")
 
@@ -152,12 +159,12 @@ class DataLoader:
             logging.error("Error in creating in train and test sets", exc_info = True)
             raise e
 
-if __name__ == "__main__":
-    train_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/train.csv'
-    test_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/test.csv'
+#if __name__ == "__main__":
+#    train_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/train.csv'
+#    test_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/test.csv'
 
-    data_loader = DataLoader(num_words = 10000, max_text_len = 100)
+#    data_loader = DataLoader(num_words = 10000, max_text_len = 100)
+#
+#    X_train, y_train, X_test, y_test = data_loader.create_train_test_ds(train_path, test_path)
 
-    X_train, y_train, X_test, y_test = data_loader.create_train_test_ds(train_path, test_path)
-
-    print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
+#    print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)
