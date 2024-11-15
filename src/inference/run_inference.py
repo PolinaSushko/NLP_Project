@@ -7,6 +7,15 @@ from src.exception import CustomException
 from src.logger import logging
 
 def predict(input_df):
+    """
+    Predicts sentiment labels for a given input dataframe of reviews using a pre-trained model.
+
+    Parameters:
+    - input_df (pd.DataFrame): A DataFrame containing two columns: 'Review'，'Sentiment'.
+
+    Returns:
+    - binary_predictions (np.array): An array of binary sentiment predictions.
+    """
     try:
         logging.info("Loading input data")
         X_test = np.array([np.fromstring(row, sep=' ') for row in input_df['Review']])
@@ -25,6 +34,12 @@ def predict(input_df):
             raise CustomException(e, sys)
 
 def main():
+    """
+    Loads test data, makes predictions, and saves the results.
+
+    Purpose:
+    - Serves as an entry point to execute the prediction pipeline end-to-end, from loading test data to saving predictions.
+    """
     test_pr = pd.read_csv('data/processed/test_processed.csv')
     preds   = predict(test_pr)
 

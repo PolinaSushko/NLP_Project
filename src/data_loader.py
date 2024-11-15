@@ -18,7 +18,31 @@ nltk.download('omw-1.4')
 nltk.download('punkt_tab')
 
 class DataLoader:
+    """
+    A class for loading, preprocessing, and tokenizing text data for sentiment analysis.
+    
+    Attributes:
+    - NUM_WORDS (int): The maximum number of words to keep based on word frequency for the tokenizer.
+    - MAX_TEXT_LEN (int): The maximum length of input sequences for padding.
+    - stop_words (set): A set of English stopwords used to filter out common words.
+    - stemmer (SnowballStemmer): A stemmer to reduce words to their root form.
+    - tokenizer (Tokenizer): A Keras Tokenizer to convert text to sequences.
+
+    Methods:
+    - load_data: Loads raw data from specified CSV files.
+    - preprocess_text: Cleans and preprocesses text, including tokenization, stopword removal, and stemming.
+    - tokenize_text: Maps sentiment labels, tokenizes processed reviews, and converts them into sequences.
+    - apply_preprocess: Loads, preprocesses, and tokenizes both training and testing datasets.
+    - create_train_test_ds: Pads the tokenized sequences, converts them to numpy arrays, and saves processed datasets to CSV files.
+    """
     def __init__(self, num_words = 10000, max_text_len = 100):
+        """
+        Initializes DataLoader with specified vocabulary size and maximum text length for tokenization and padding.
+
+        Parameters:
+        - num_words (int): Vocabulary size limit for the tokenizer (default: 10000).
+        - max_text_len (int): Maximum sequence length for padding (default: 100).
+        """
         self.NUM_WORDS = num_words
         self.MAX_TEXT_LEN = max_text_len
         self.stop_words = set(stopwords.words('english'))
@@ -26,6 +50,17 @@ class DataLoader:
         self.tokenizer = Tokenizer(num_words=self.NUM_WORDS)
 
     def load_data(self, train_path, test_path):
+        """
+        Loads training and testing data from CSV files.
+
+        Parameters:
+        - train_path (str): File path for the training data CSV.
+        - test_path (str): File path for the testing data CSV.
+
+        Returns:
+        - train_data (DataFrame): Loaded training data as a pandas DataFrame.
+        - test_data (DataFrame): Loaded testing data as a pandas DataFrame.
+        """
         logging.info("Loading data from %s and %s", train_path, test_path)
 
         try:
@@ -78,6 +113,16 @@ class DataLoader:
             raise e
 
     def tokenize_text(self, text):
+        """
+        Maps sentiment labels, tokenizes processed reviews, and converts text into sequences of tokens.
+
+        Parameters:
+        - text (DataFrame): DataFrame containing reviews and sentiment labels.
+
+        Returns:
+        - sequences (list): List of tokenized sequences for each review.
+        - sentiment (Series): Series containing the mapped sentiment labels.
+        """
         logging.info("Tokenizing text data and mapping sentiment labels")
 
         try:
@@ -100,6 +145,19 @@ class DataLoader:
             raise e
 
     def apply_preprocess(self, train_path, test_path):
+        """
+        Loads, preprocesses, and tokenizes the training and testing datasets.
+
+        Parameters:
+        - train_path (str): Path to the training data CSV file.
+        - test_path (str): Path to the testing data CSV file.
+
+        Returns:
+        - train_sequences (list): List of tokenized training sequences.
+        - train_sentiment (Series): Series of training sentiment labels.
+        - test_sequences (list): List of tokenized testing sequences.
+        - test_sentiment (Series): Series of testing sentiment labels.
+        """
         logging.info("Starting data preprocessing")
 
         try:
@@ -119,7 +177,20 @@ class DataLoader:
             logging.error("Error in preprocessor applying", exc_info = True)
             raise e
 
-    def create_train_test_ds(self, train_path, test_path):
+    def create_train_test_processed_ds(self, train_path, test_path):
+        """
+        Creates padded training and testing datasets and saves them to CSV files.
+
+        Parameters:
+        - train_path (str): Path to the training data CSV file.
+        - test_path (str): Path to the testing data CSV file.
+
+        Returns:
+        - X_train (np.array): Padded training sequences.
+        - y_train (np.array): Training sentiment labels.
+        - X_test (np.array): Padded testing sequences.
+        - y_test (np.array): Testing sentiment labels.
+        """
         logging.info("Creating training and test datasets with padding")
 
         try:
@@ -148,8 +219,8 @@ class DataLoader:
                 'Sentiment' : y_test
             })
 
-            df_train_save.to_csv("E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/processed/train_processed.csv", index = False)
-            df_test_save.to_csv("E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/processed/test_processed.csv", index = False)
+            df_train_save.to_csv("data/processed/train_processed.csv", index = False)
+            df_test_save.to_csv("data/processed/test_processed.csv", index = False)
 
             logging.info("Datasets created")
 
@@ -158,13 +229,3 @@ class DataLoader:
         except Exception as e:
             logging.error("Error in creating in train and test sets", exc_info = True)
             raise e
-
-#if __name__ == "__main__":
-#    train_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/train.csv'
-#    test_path = 'E:/Work Folder/0_Polya/My/EPAM/Introduction to Data Science Program/NLP_Project/data/raw/test.csv'
-
-#    data_loader = DataLoader(num_words = 10000, max_text_len = 100)
-#
-#    X_train, y_train, X_test, y_test = data_loader.create_train_test_ds(train_path, test_path)
-
-#    print(X_train.shape, y_train.shape, X_test.shape, y_test.shape)

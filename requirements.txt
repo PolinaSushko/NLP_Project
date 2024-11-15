@@ -1,9 +1,9 @@
 pandas
 numpy
-#matplotlib
-#plotly
+matplotlib
+plotly
 scikit-learn
-#tensorflow
-#nltk
-#keras
+tensorflow
+nltk
+keras
 #-e .
