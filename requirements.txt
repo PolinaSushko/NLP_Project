@@ -1,2 +1,10 @@
-keras_preprocessing
+numpy
+pandas
+scikit-learn
 nltk
+joblib
+matplotlib
+seaborn
+wordcloud
+torch
+transformers
