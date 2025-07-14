@@ -1,0 +1,17 @@
+Tuned Logistic Regression (Stemmed + TF-IDF) (Test) Results:
+==================================================
+Accuracy:  0.9232
+Precision: 0.9133
+Recall:    0.9352
+F1-Score:  0.9241
+ROC-AUC:   0.9762
+
+Classification Report:
+               precision    recall  f1-score   support
+
+           0       0.93      0.91      0.92      5000
+           1       0.91      0.94      0.92      5000
+
+    accuracy                           0.92     10000
+   macro avg       0.92      0.92      0.92     10000
+weighted avg       0.92      0.92      0.92     10000
