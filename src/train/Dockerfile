@@ -14,11 +14,17 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy source code
 COPY src/ src/
 
+# Copy utils.py 
+COPY utils.py .
+
 # Copy data directory (will be mounted)
 COPY data/ data/
 
 # Create output directories
 RUN mkdir -p outputs/models outputs/figures
+
+# Copy settings.json if it exists (optional, since it will be mounted)
+COPY settings.json* ./
 
 # Copy config file if used
 COPY ${CONF_PATH} /app

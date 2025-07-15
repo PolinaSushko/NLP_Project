@@ -27,6 +27,7 @@ NLP_PROJECT/
 |-- README.md
 |-- requirements.txt
 |-- utils.py
+|-- settings.json
 |-- .gitignore
 ```
 
@@ -153,7 +154,7 @@ Mount the data/ and outputs/ directories to persist data and results.
 
 The container automatically runs train.py, trains the model, saves it to outputs/models/lr_stemmed_tfidf.pkl.
 ```
-docker run --rm -v $(pwd)/../../data:/app/data -v $(pwd)/../../outputs:/app/outputs sentiment-train
+docker run --rm -v "${PWD}/outputs:/app/outputs" -v "${PWD}/data:/app/data" -v "${PWD}/settings.json:/app/settings.json" sentiment-train
 ```
 
 **3. Outputs:**
@@ -165,7 +166,7 @@ The inference process loads the trained Logistic Regression model and generates 
 
 **1. Build the Inference Docker Image:**
 ```
-docker build -t sentiment-inference . -f src/inference/Dockerfile .
+docker build -t sentiment-inference -f src/inference/Dockerfile .
 ```
 
 **2. Run the Inference Container:**
@@ -176,7 +177,7 @@ The container runs run.py, generates predictions, and saves them to outputs/pred
 
 Testing metrics and plots are also generated.
 ```
-docker run --rm -v $(pwd)/../../data:/app/data -v $(pwd)/../../outputs:/app/outputs sentiment-inference
+docker run --rm -v "${PWD}/outputs:/app/outputs" -v "${PWD}/data:/app/data" -v "${PWD}/settings.json:/app/settings.json" sentiment-inference
 ```
 
 **3. Outputs:**

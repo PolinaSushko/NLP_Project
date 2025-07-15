@@ -14,6 +14,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # Copy source code
 COPY src/ src/
 
+# Copy utils.py 
+COPY utils.py .
+
 # Copy data and models directories (will be mounted)
 COPY data/ data/
 COPY outputs/models/ outputs/models/
