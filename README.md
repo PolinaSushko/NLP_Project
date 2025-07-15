@@ -27,6 +27,7 @@ NLP_PROJECT/
 |-- README.md
 |-- requirements.txt
 |-- utils.py
+|-- settings.json
 |-- .gitignore
 ```
 
