@@ -89,7 +89,6 @@ Three traditional machine learning models (Logistic Regression, Random Forest, N
     - Strong ROC-AUC but slightly lower accuracy/F1 than Logistic Regression.
 
 **Test Set Results:**
-- *Tuned Logistic Regression (Stemmed + TF-IDF):*
 
 | Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
 |-------|----------|-----------|--------|----------|---------|
@@ -97,23 +96,23 @@ Three traditional machine learning models (Logistic Regression, Random Forest, N
 | DistilBERT | 0.883 | 0.891 | 0.876 | 0.883 | 0.954 |
 
 **Best Model Selection:**
-    - **Tuned Logistic Regression (Stemmed + TF-IDF)** was selected as the best model due to its superior performance across all metrics on the test set (Accuracy ≥ 0.85, F1-Score: 0.924).
-    - **Reasoning:** Logistic Regression aligns well with TF-IDF's linear feature space, is computationally efficient, and outperforms the more complex DistilBERT, possibly due to BERT's early stopping or suboptimal hyperparameters.
+- **Tuned Logistic Regression (Stemmed + TF-IDF)** was selected as the best model due to its superior performance across all metrics on the test set (Accuracy ≥ 0.85, F1-Score: 0.924).
+- **Reasoning:** Logistic Regression aligns well with TF-IDF's linear feature space, is computationally efficient, and outperforms the more complex DistilBERT, possibly due to BERT's early stopping or suboptimal hyperparameters.
 
 **Conclusion:** The tuned Logistic Regression model with Stemmed + TF-IDF features achieves the best balance of performance, simplicity, and efficiency.
 
 ### Potential Business Applications
 **Customer Feedback Analysis:**
-    - Automatically classify customer reviews (e.g., for movies, products, or services) to gauge sentiment and identify areas for improvement.
-    - It enables businesses to prioritize customer satisfaction and address negative feedback promptly.
+- Automatically classify customer reviews (e.g., for movies, products, or services) to gauge sentiment and identify areas for improvement.
+- It enables businesses to prioritize customer satisfaction and address negative feedback promptly.
 
 **Market Research:**
-    - Analyze social media or review platforms to understand consumer sentiment toward brands or products.
-    - It informs marketing strategies and product development by identifying trends and preferences.
+- Analyze social media or review platforms to understand consumer sentiment toward brands or products.
+- It informs marketing strategies and product development by identifying trends and preferences.
 
 **Content Moderation:**
-    - Flag negative or toxic reviews for further review, improving platform user experience.
-    - It enhances brand reputation and user trust.
+- Flag negative or toxic reviews for further review, improving platform user experience.
+- It enhances brand reputation and user trust.
 
 Sentiment analysis provides actionable insights for businesses, driving customer-centric decisions and operational efficiency.
 
@@ -125,7 +124,7 @@ Sentiment analysis provides actionable insights for businesses, driving customer
 **2. Clone the Repository:**
 ```
 git clone https://github.com/PolinaSushko/NLP_project.git
-cd NLP_project
+cd NLP_PROJECT
 ```
 
 **3. Prepare Data:**
@@ -145,8 +144,7 @@ The training process preprocesses data, trains the tuned Logistic Regression mod
 
 **1. Build the Training Docker Image:**
 ```
-cd src/train
-docker build -t sentiment-train .
+docker build -t sentiment-train -f src/train/Dockerfile .
 ```
 
 **2. Run the Training Container:**
@@ -167,8 +165,7 @@ The inference process loads the trained Logistic Regression model and generates 
 
 **1. Build the Inference Docker Image:**
 ```
-cd src/inference
-docker build -t sentiment-inference .
+docker build -t sentiment-inference . -f src/inference/Dockerfile .
 ```
 
 **2. Run the Inference Container:**

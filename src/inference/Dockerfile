@@ -1,7 +1,7 @@
 FROM python:3.10
 
 # Initialize settings_name variable with the default value
-ARG settings_name=settings.json
+ARG settings_name=../../settings.json
 ENV CONF_PATH=${settings_name}
 
 # Set working directory
