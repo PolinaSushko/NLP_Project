@@ -1,6 +1,6 @@
 # Sentiment Analysis Project
 
-This repository contains a comprehensive sentiment analysis pipeline for classifying text reviews as positive or negative. The project includes both Data Science (DS) and Machine Learning Engineering (MLE) components, with scripts for data preprocessing, feature engineering, model training, and inference. The pipeline compares traditional machine learning models (Logistic Regression, Random Forest, Naive Bayes) with a transformer-based model (DistilBERT) and is fully containerized using Docker for reproducibility.
+This repository contains a comprehensive sentiment analysis pipeline for classifying text reviews as positive or negative. The project includes both Data Science (DS) and Machine Learning Engineering (MLE) components, with scripts for data preprocessing, feature engineering, model training, and inference. The pipeline compares traditional machine learning models (Logistic Regression, Random Forest, Naive Bayes, XGBoost) with a transformer-based model (DistilBERT) and is fully containerized using Docker for reproducibility.
 
 ## Project Structure
 
@@ -66,41 +66,53 @@ The pipeline implements comprehensive text preprocessing and vectorization techn
 - **Vectorization:**
     - *Bag of Words (BoW):* Uses CountVectorizer to create a frequency-based representation (max 5,000 features).
     - *TF-IDF:* Uses TfidfVectorizer to weigh terms by importance (max 5,000 features). Emphasizes distinctive words for sentiment analysis.
+    - *Dimensionality Reduction:* Applied TruncatedSVD (3,000 components) to reduce feature space.
     - *Comparison:* TF-IDF outperforms BoW by focusing on discriminative terms, improving model performance.
 - *Conclusion:* Lemmatization + TF-IDF provides a balanced approach, preserving meaning while emphasizing important terms. Stemming + TF-IDF also performs well, particularly for Logistic Regression.
 
 ### Modeling
-Three traditional machine learning models (Logistic Regression, Random Forest, Naive Bayes) and one transformer-based model (DistilBERT) were evaluated:
+Four traditional machine learning models (Logistic Regression, Random Forest, Naive Bayes, XGBoost) and one transformer-based model (DistilBERT) were evaluated:
 - Models were tested on four configurations: Stemmed + BoW, Lemmatized + BoW, Stemmed + TF-IDF, Lemmatized + TF-IDF.
 - Metrics: Accuracy, Precision, Recall, F1-Score, ROC-AUC.
 - Hyperparameter tuning was performed for traditional models using RandomizedSearchCV.
 
 **Results on Validation Set:**
 - *Tuned Logistic Regression (Stemmed + TF-IDF):*
-    - Accuracy: 0.885, F1-Score: 0.887, ROC-AUC: 0.952
+    - Accuracy: 0.884, F1-Score: 0.886, ROC-AUC: 0.952
     - Best performer due to its alignment with TF-IDF features.
-- *Tuned Random Forest (Lemmatized + TF-IDF):*
-    - Accuracy: 0.846, F1-Score: 0.847, ROC-AUC: 0.922
+- *Tuned Random Forest (Stemmed + TF-IDF):*
+    - Accuracy: 0.788, F1-Score: 0.793, ROC-AUC: 0.867
     - Improved after tuning but less effective than Logistic Regression.
-- *Tuned Naive Bayes (Stemmed + TF-IDF):*
-    - Accuracy: 0.843, F1-Score: 0.844, ROC-AUC: 0.924
+- *Tuned Naive Bayes (Lemmatized + TF-IDF):*
+    - Accuracy: 0.852, F1-Score: 0.855, ROC-AUC: 0.931
     - Benefited from TF-IDF and tuning.
+- *XGBoost (Stemmed + TF-IDF):*
+    - Accuracy: 0.849, F1-Score: 0.850, ROC-AUC: 0.926
 - *DistilBERT:*
-    - Accuracy: 0.883, F1-Score: 0.883, ROC-AUC: 0.952
+    - Accuracy: 0.882, F1-Score: 0.882, ROC-AUC: 0.952
     - Strong ROC-AUC but slightly lower accuracy/F1 than Logistic Regression.
 
 **Test Set Results:**
 
 | Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
 |-------|----------|-----------|--------|----------|---------|
-| Tuned Logistic Regression (Stemmed + TF-IDF) | 0.925 | 0.914 | 0.935 | 0.924 | 0.976 |
+| Tuned Logistic Regression (Stemmed + TF-IDF) | 0.890 | 0.877 | 0.908 | 0.892 | 0.956 |
 | DistilBERT | 0.883 | 0.891 | 0.876 | 0.883 | 0.954 |
 
 **Best Model Selection:**
-- **Tuned Logistic Regression (Stemmed + TF-IDF)** was selected as the best model due to its superior performance across all metrics on the test set (Accuracy ≥ 0.85, F1-Score: 0.924).
-- **Reasoning:** Logistic Regression aligns well with TF-IDF's linear feature space, is computationally efficient, and outperforms the more complex DistilBERT, possibly due to BERT's early stopping or suboptimal hyperparameters.
+- **Tuned Logistic Regression (Stemmed + TF-IDF)** was selected as the best model due to its superior performance across all metrics on the test set (Accuracy ≥ 0.85, F1-Score: 0.892).
+- **Reasoning:** Logistic Regression excels in linear feature spaces, outperforms the more complex DistilBERT, and benefits from robust TF-IDF features. DistilBERT’s performance is limited by early stopping and potential hyperparameter issues, while XGBoost, Random Forest, and Naive Bayes lag slightly behind.
 
 **Conclusion:** The tuned Logistic Regression model with Stemmed + TF-IDF features achieves the best balance of performance, simplicity, and efficiency.
+
+**Feature Importance Analysis (Tuned Logistic Regression, Stemmed + TF-IDF):**
+- **Positive Influence (Favoring Positive Sentiment):**
+    - Top features: "great" (4.37), "favorit" (4.31), "perfect" (4.18), "today" (3.18), "one best" (2.82).
+    - Reflects praise and enthusiasm, with stemmed terms and n-grams capturing sentiment effectively.
+- **Negative Influence (Favoring Negative Sentiment):**
+    - Top features: "bad" (-6.89), "poor" (-5.26), "bore" (-4.96), "noth" (-4.16), "wast time" (-3.72).
+    - Captures dissatisfaction and criticism, with strong negative coefficients.
+- *Insight:* TF-IDF with stemming produces interpretable features, with n-grams like "one best" and "wast time" enhancing contextual understanding.
 
 ### Potential Business Applications
 **Customer Feedback Analysis:**
@@ -115,6 +127,10 @@ Three traditional machine learning models (Logistic Regression, Random Forest, N
 - Flag negative or toxic reviews for further review, improving platform user experience.
 - It enhances brand reputation and user trust.
 
+**Recommendation Systems:**
+- Leverage sentiment analysis to enhance recommendation engines by identifying user preferences based on positive or negative feedback.
+- It improves personalized content suggestions (e.g., recommending movies or products with high positive sentiment), increasing user engagement and satisfaction.
+
 Sentiment analysis provides actionable insights for businesses, driving customer-centric decisions and operational efficiency.
 
 ## Machine Learning Engineering (MLE) Part
@@ -128,12 +144,25 @@ git clone https://github.com/PolinaSushko/NLP_project.git
 cd NLP_PROJECT
 ```
 
-**3. Prepare Data:**
+**3. Set Up Python Environment:**
+
+Create and activate a virtual environment:
+```
+python -m venv venv
+source venv/bin/activate  
+```
+
+Install required dependencies:
+```
+pip install -r requirements.txt
+```
+
+**4. Prepare Data:**
 ```
 python src/data_loader.py
 ```
 
-**4. Directory Setup:**
+**5. Directory Setup:**
 
 Ensure the outputs/ directory exists for storing models, predictions, and figures:
 ```
