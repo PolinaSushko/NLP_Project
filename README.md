@@ -97,7 +97,7 @@ Four traditional machine learning models (Logistic Regression, Random Forest, Na
 | Model | Accuracy | Precision | Recall | F1-Score | ROC-AUC |
 |-------|----------|-----------|--------|----------|---------|
 | Tuned Logistic Regression (Stemmed + TF-IDF) | 0.890 | 0.877 | 0.908 | 0.892 | 0.956 |
-| DistilBERT | 0.883 | 0.891 | 0.876 | 0.883 | 0.954 |
+| DistilBERT | 0.883 | 0.88 | 0.88 | 0.884 | 0.944 |
 
 **Best Model Selection:**
 - **Tuned Logistic Regression (Stemmed + TF-IDF)** was selected as the best model due to its superior performance across all metrics on the test set (Accuracy ≥ 0.85, F1-Score: 0.892).
